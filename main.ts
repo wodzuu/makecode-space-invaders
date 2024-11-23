@@ -1,22 +1,16 @@
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (!(projectile) || scene.screenHeight() - 20 > projectile.y) {
+    if (custom.isUpFrom(projectile, playerSprite)) {
         projectile = sprites.createProjectileFromSprite(img`
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . 7 7 . . . . . . . 
-            . . . . . . . 7 7 . . . . . . . 
-            . . . . . . . 7 7 . . . . . . . 
-            . . . . . . . 7 7 . . . . . . . 
-            . . . . . . 7 7 7 7 . . . . . . 
-            . . . . . . 7 7 7 7 . . . . . . 
-            . . . . . . 7 7 7 7 . . . . . . 
-            . . . . . . . 7 7 . . . . . . . 
-            . . . . . . . 7 7 . . . . . . . 
-            . . . . . . . . 7 . . . . . . . 
-            . . . . . . . 7 7 . . . . . . . 
-            . . . . . . . . . . . . . . . . 
-            . . . . . . . . . . . . . . . . 
+            . . . . 8 8 . . . . 
+            . . . . 7 7 . . . . 
+            . . . . 7 7 . . . . 
+            . . . . 7 7 . . . . 
+            . . . 7 7 7 7 . . . 
+            . . . 7 7 7 7 . . . 
+            . . . 7 7 7 7 . . . 
+            . . . . 7 7 . . . . 
+            . . . . 6 6 . . . . 
+            . . . . 4 4 . . . . 
             `, playerSprite, 0, -50)
     }
 })
@@ -32,33 +26,23 @@ let enemySprite: Sprite = null
 let projectile: Sprite = null
 let playerSprite: Sprite = null
 playerSprite = sprites.create(img`
-    ....................
-    ....................
-    ....................
-    ....................
-    ....................
-    ....................
-    ........4eee........
-    .......eeeeee.......
-    .........cc.........
-    .........4c.........
-    ........4444........
-    .......444444.......
-    ......44444444......
-    .....4444444444.....
-    .....eeeeeeeeee.....
-    .....eeeeeeeecc.....
-    ......eeeeeecc......
-    .......eccccc.......
-    ....................
-    ....................
+    . . e e e e e e . . 
+    . . . . c c . . . . 
+    . . . . 4 c . . . . 
+    . . . 4 4 4 4 . . . 
+    . . 4 4 4 4 4 4 . . 
+    . 4 4 4 4 4 4 4 4 . 
+    4 4 4 4 4 4 4 4 4 4 
+    e e e e e e e e e e 
+    e e e e e e e e c c 
+    . e e e e e e c c . 
     `, SpriteKind.Player)
 controller.moveSprite(playerSprite, 100, 0)
 playerSprite.setPosition(scene.screenWidth() / 2, scene.screenHeight())
 playerSprite.setStayInScreen(true)
 effects.starField.startScreenEffect()
 game.onUpdateInterval(2000, function () {
-    if (randint(0, 3) != 0) {
+    if (randint(0, 7) != 0) {
         enemySprite = sprites.create(img`
             ....................
             ....................
