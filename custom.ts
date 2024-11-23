@@ -10,6 +10,8 @@ namespace custom {
     //% reference.defl=reference
     //% reference.shadow=variables_get
     export function isUpFrom(sprite: Sprite, reference: Sprite): boolean {
+        const i: Image = image.screenImage()//image.create(30,30);
+        i.drawRect(0,0,30,30,2);
         if (sprite && reference) {
             return sprite.bottom < reference.top;
         }
