@@ -12,6 +12,7 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
             . . . . . . . . . . 
             . . . . . . . . . . 
             `, playerSprite, 50, 0)
+        music.play(music.melodyPlayable(music.pewPew), music.PlaybackMode.InBackground)
     }
 })
 function createStar (x_position: number) {
@@ -48,16 +49,21 @@ info.onScore(10, function () {
     info.changeLifeBy(1)
 })
 sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Player, function (sprite, otherSprite) {
-    sprites.destroy(sprite, effects.halo, 500)
+    extraEffects.createSpreadEffectOnAnchor(sprite, extraEffects.createFullPresetsSpreadEffectData(ExtraEffectPresetColor.Fire, ExtraEffectPresetShape.Explosion), 100, 30, 5)
     info.changeLifeBy(-1)
+    sprites.destroy(sprite)
+    music.play(music.melodyPlayable(music.bigCrash), music.PlaybackMode.InBackground)
 })
 info.onLifeZero(function () {
     sprites.destroy(playerSprite, effects.halo, 500)
     game.gameOver(false)
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
-    sprites.destroy(otherSprite, effects.fire, 500)
+    extraEffects.createSpreadEffectOnAnchor(otherSprite, extraEffects.createFullPresetsSpreadEffectData(ExtraEffectPresetColor.Electric, ExtraEffectPresetShape.Explosion), 100, 30, 5)
+    sprites.destroy(sprite)
+    sprites.destroy(otherSprite)
     info.changeScoreBy(1)
+    music.play(music.melodyPlayable(music.zapped), music.PlaybackMode.InBackground)
 })
 let enemySprite: Sprite = null
 let star: Sprite = null
@@ -83,6 +89,7 @@ info.setScore(0)
 for (let index = 0; index <= scene.screenWidth(); index++) {
     createStar(index)
 }
+extraEffects.createFullPresetsSpreadEffectData(ExtraEffectPresetColor.Fire, ExtraEffectPresetShape.Explosion).setSpreadEffectDataColorLookupTable([2, 5])
 game.onUpdate(function () {
     createStar(scene.screenWidth())
 })

@@ -2,7 +2,8 @@
     "name": "Space invaders",
     "description": "",
     "dependencies": {
-        "device": "*"
+        "device": "*",
+        "Extra Effects": "github:alexszeto/extra-effects#v3.1.0"
     },
     "files": [
         "main.blocks",
