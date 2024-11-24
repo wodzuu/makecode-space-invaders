@@ -14,8 +14,37 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
             `, playerSprite, 50, 0)
     }
 })
+function createStar (x_position: number) {
+    if (Math.percentChance(5)) {
+        star = sprites.createProjectileFromSide(img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . 1 . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `, randint(-5, -15), 0)
+        star.setFlag(SpriteFlag.Ghost, true)
+        star.setPosition(x_position, randint(0, scene.screenHeight()))
+    }
+}
+info.onScore(60, function () {
+    info.changeLifeBy(1)
+})
+info.onScore(30, function () {
+    info.changeLifeBy(1)
+})
 info.onScore(10, function () {
-    info.setScore(0)
     info.changeLifeBy(1)
 })
 sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Player, function (sprite, otherSprite) {
@@ -31,6 +60,7 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, oth
     info.changeScoreBy(1)
 })
 let enemySprite: Sprite = null
+let star: Sprite = null
 let projectile: Sprite = null
 let playerSprite: Sprite = null
 playerSprite = sprites.create(img`
@@ -46,24 +76,42 @@ playerSprite = sprites.create(img`
     2 2 . . . . . . . . 
     `, SpriteKind.Player)
 controller.moveSprite(playerSprite, 0, 100)
-playerSprite.setPosition(0, scene.screenHeight() / 2)
+playerSprite.setPosition(15, scene.screenHeight() / 2)
 playerSprite.setStayInScreen(true)
-game.setGameOverEffect(false, effects.bubbles)
 info.setLife(3)
 info.setScore(0)
+for (let index = 0; index <= scene.screenWidth(); index++) {
+    createStar(index)
+}
 game.onUpdate(function () {
-    if (playerSprite.vx < 0) {
+    createStar(scene.screenWidth())
+})
+game.onUpdate(function () {
+    if (playerSprite.vy < 0) {
         playerSprite.setImage(img`
+            . . . . . . . . . . 
+            . . . . . . . . . . 
             2 2 . . . . . . . . 
-            . 2 2 . . . . . . . 
-            . 2 2 2 2 . . . . . 
-            . . 2 2 2 2 2 . . . 
-            . . . 2 2 2 2 2 2 2 
-            . . . 2 2 2 2 2 2 2 
-            . . 2 2 2 2 2 . . . 
-            . 2 2 2 2 . . . . . 
-            . 2 2 . . . . . . . 
+            . 2 2 2 2 2 . . . . 
+            . . 2 2 2 2 2 2 2 2 
+            . . 2 2 2 2 2 2 2 2 
+            . 2 2 2 2 2 2 . . . 
+            2 2 2 2 3 . . . . . 
+            2 2 3 . . . . . . . 
+            2 3 . . . . . . . . 
+            `)
+    } else if (playerSprite.vy > 0) {
+        playerSprite.setImage(img`
+            2 3 . . . . . . . . 
+            2 2 3 . . . . . . . 
+            2 2 2 2 3 . . . . . 
+            . 2 2 2 2 2 2 . . . 
+            . . 2 2 2 2 2 2 2 2 
+            . . 2 2 2 2 2 2 2 2 
+            . 2 2 2 2 2 . . . . 
             2 2 . . . . . . . . 
+            . . . . . . . . . . 
+            . . . . . . . . . . 
             `)
     } else {
         playerSprite.setImage(img`
@@ -96,5 +144,6 @@ game.onUpdateInterval(500, function () {
             `, SpriteKind.Enemy)
         enemySprite.setPosition(scene.screenWidth(), randint(0, scene.screenHeight()))
         enemySprite.setVelocity(randint(-35, -25), 0)
+        enemySprite.setFlag(SpriteFlag.DestroyOnWall, true)
     }
 })
