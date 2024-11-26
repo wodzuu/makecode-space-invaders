@@ -46,6 +46,15 @@ namespace custom {
         });
     }
 
+    //% block="every $interval ms"
+    //% interval.defl=1
+    //% inlineInputMode=inline
+    //% handlerStatement
+    export function runEvery(interval: number, handler: () => void): void {
+        game.onUpdateInterval(interval, handler);
+    }
+
+
     let setup: boolean = false;
     //% block
     export function drawRectangle(): void {

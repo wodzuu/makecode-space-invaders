@@ -1,6 +1,9 @@
+namespace SpriteKind {
+    export const EnemyProjectile = SpriteKind.create()
+}
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (custom.isRightFrom(projectile, playerSprite)) {
-        projectile = sprites.createProjectileFromSprite(img`
+    if (custom.isRightFrom(enemyProjectile, playerSprite)) {
+        enemyProjectile = sprites.createProjectileFromSprite(img`
             . . . . . . . . . . 
             . . . . . . . . . . 
             . . . . . . . . . . 
@@ -67,7 +70,7 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, oth
 })
 let enemySprite: Sprite = null
 let star: Sprite = null
-let projectile: Sprite = null
+let enemyProjectile: Sprite = null
 let playerSprite: Sprite = null
 playerSprite = sprites.create(img`
     2 2 . . . . . . . . 
@@ -137,7 +140,7 @@ game.onUpdate(function () {
 })
 game.onUpdateInterval(500, function () {
     if (Math.percentChance(60)) {
-        if (Math.percentChance(90)) {
+        if (Math.percentChance(50)) {
             enemySprite = sprites.create(img`
                 . . . . . . . . 9 9 
                 . . . . . . 9 9 9 9 
@@ -154,22 +157,40 @@ game.onUpdateInterval(500, function () {
             enemySprite.setVelocity(randint(-35, -25), 0)
             enemySprite.setFlag(SpriteFlag.DestroyOnWall, true)
         } else {
-            enemySprite = sprites.create(img`
-                . . . . . . . . 5 5 
-                . . . . . . 5 5 5 5 
-                . . . . 5 5 5 5 5 5 
-                . . . 5 5 5 5 5 5 . 
-                5 5 5 5 4 4 5 5 . . 
-                5 5 5 5 4 4 5 5 . . 
-                . . . 5 5 5 5 5 5 . 
-                . . . . 5 5 5 5 5 5 
-                . . . . . . 5 5 5 5 
-                . . . . . . . . 5 5 
-                `, SpriteKind.Enemy)
-            enemySprite.setPosition(scene.screenWidth(), randint(0, scene.screenHeight()))
-            enemySprite.setVelocity(randint(-35, -25), 0)
-            enemySprite.setFlag(SpriteFlag.DestroyOnWall, true)
-            custom.follow(enemySprite, playerSprite, 0, randint(0.1, 2))
+            if (Math.percentChance(50)) {
+                enemySprite = sprites.create(img`
+                    . . . . . . . . 5 5 
+                    . . . . . . 5 5 5 5 
+                    . . . . 5 5 5 5 5 5 
+                    . . . 5 5 5 5 5 5 . 
+                    5 5 5 5 4 4 5 5 . . 
+                    5 5 5 5 4 4 5 5 . . 
+                    . . . 5 5 5 5 5 5 . 
+                    . . . . 5 5 5 5 5 5 
+                    . . . . . . 5 5 5 5 
+                    . . . . . . . . 5 5 
+                    `, SpriteKind.Enemy)
+                enemySprite.setPosition(scene.screenWidth(), randint(0, scene.screenHeight()))
+                enemySprite.setVelocity(randint(-35, -25), 0)
+                enemySprite.setFlag(SpriteFlag.DestroyOnWall, true)
+                custom.follow(enemySprite, playerSprite, 0, randint(0.1, 2))
+            } else {
+                enemySprite = sprites.create(img`
+                    . . . . . . . . . a 
+                    . . . . . . . . a a 
+                    . . . . a a a a a a 
+                    a . . a a a a a a . 
+                    a a a a 4 4 a a . . 
+                    a a a a 4 4 a a . . 
+                    a . . a a a a a a . 
+                    . . . . a a a a a a 
+                    . . . . . . . . a a 
+                    . . . . . . . . . a 
+                    `, SpriteKind.Enemy)
+                enemySprite.setPosition(scene.screenWidth(), randint(0, scene.screenHeight()))
+                enemySprite.setVelocity(randint(-35, -25), 0)
+                enemySprite.setFlag(SpriteFlag.DestroyOnWall, true)
+            }
         }
     }
 })
