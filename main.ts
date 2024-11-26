@@ -137,20 +137,39 @@ game.onUpdate(function () {
 })
 game.onUpdateInterval(500, function () {
     if (Math.percentChance(60)) {
-        enemySprite = sprites.create(img`
-            . . . . . . . . 9 9 
-            . . . . . . 9 9 9 9 
-            . . . . 9 9 9 9 9 9 
-            . . 9 9 9 9 9 9 9 9 
-            9 9 9 9 9 9 9 9 9 9 
-            9 9 9 9 9 9 9 9 9 9 
-            . . 9 9 9 9 9 9 9 9 
-            . . . . 9 9 9 9 9 9 
-            . . . . . . 9 9 9 9 
-            . . . . . . . . 9 9 
-            `, SpriteKind.Enemy)
-        enemySprite.setPosition(scene.screenWidth(), randint(0, scene.screenHeight()))
-        enemySprite.setVelocity(randint(-35, -25), 0)
-        enemySprite.setFlag(SpriteFlag.DestroyOnWall, true)
+        if (Math.percentChance(90)) {
+            enemySprite = sprites.create(img`
+                . . . . . . . . 9 9 
+                . . . . . . 9 9 9 9 
+                . . . . 9 9 9 9 9 9 
+                . . 9 9 9 6 9 9 9 9 
+                9 9 9 6 6 6 9 9 9 9 
+                9 9 9 6 6 6 9 9 9 9 
+                . . 9 9 9 6 9 9 9 9 
+                . . . . 9 9 9 9 9 9 
+                . . . . . . 9 9 9 9 
+                . . . . . . . . 9 9 
+                `, SpriteKind.Enemy)
+            enemySprite.setPosition(scene.screenWidth(), randint(0, scene.screenHeight()))
+            enemySprite.setVelocity(randint(-35, -25), 0)
+            enemySprite.setFlag(SpriteFlag.DestroyOnWall, true)
+        } else {
+            enemySprite = sprites.create(img`
+                . . . . . . . . 5 5 
+                . . . . . . 5 5 5 5 
+                . . . . 5 5 5 5 5 5 
+                . . . 5 5 5 5 5 5 . 
+                5 5 5 5 4 4 5 5 . . 
+                5 5 5 5 4 4 5 5 . . 
+                . . . 5 5 5 5 5 5 . 
+                . . . . 5 5 5 5 5 5 
+                . . . . . . 5 5 5 5 
+                . . . . . . . . 5 5 
+                `, SpriteKind.Enemy)
+            enemySprite.setPosition(scene.screenWidth(), randint(0, scene.screenHeight()))
+            enemySprite.setVelocity(randint(-35, -25), 0)
+            enemySprite.setFlag(SpriteFlag.DestroyOnWall, true)
+            custom.follow(enemySprite, playerSprite, 0, randint(0.1, 2))
+        }
     }
 })

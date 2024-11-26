@@ -31,6 +31,21 @@ namespace custom {
         return true;
     }
 
+    //% block="set $follower follow $sprite with vx $vx and vy $vy"
+    //% sprite.defl=sprite
+    //% sprite.shadow=variables_get
+    //% follower.defl=reference
+    //% follower.shadow=variables_get
+    //% vx.defl=1
+    //% vy.defl=1
+    //% inlineInputMode=inline
+    export function follow(follower: Sprite, sprite: Sprite, vx: number, vy:number): void {
+        game.onUpdateInterval(100, ()=>{
+            if (vx != 0) follower.vx = (sprite.x - follower.x) * vx;
+            if (vy != 0) follower.vy = (sprite.y - follower.y) * vy;
+        });
+    }
+
     let setup: boolean = false;
     //% block
     export function drawRectangle(): void {
