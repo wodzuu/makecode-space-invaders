@@ -10,7 +10,7 @@ namespace custom {
     //% reference.defl=reference
     //% reference.shadow=variables_get
     export function isUpFrom(sprite: Sprite, reference: Sprite): boolean {
-        if (sprite && reference) {
+        if (!isDestroyed(sprite) && !isDestroyed(reference)) {
             return sprite.bottom < reference.top;
         }
         return true;
@@ -46,14 +46,34 @@ namespace custom {
         });
     }
 
-    //% block="every $interval ms"
+    //% block="with $sprite every $interval ms process $s"
+    //% sprite.defl=sprite
+    //% sprite.shadow=variables_get
     //% interval.defl=1
     //% inlineInputMode=inline
+    //% s.defl=thatSprite
     //% handlerStatement
-    export function runEvery(interval: number, handler: () => void): void {
-        game.onUpdateInterval(interval, handler);
+    //% draggableParameters
+    export function runEvery(sprite: Sprite, interval: number, handler: (s: Sprite) => void): void {
+        game.onUpdateInterval(interval, () => { 
+            if(!isDestroyed(sprite)) handler(sprite) 
+        });
     }
 
+    /**
+     * Returns true if the given sprite does not exist,
+     * or is destroyed, and false otherwise.
+     */
+    //% block="$sprite is destroyed"
+    //% blockId=spriteutilextisdestroyed
+    //% help=github:arcade-sprite-util/docs/is-destroyed
+    //% sprite.shadow=variables_get
+    //% sprite.defl=mySprite
+    //% weight=100
+    //% group=Sprite
+    export function isDestroyed(sprite: Sprite): boolean {
+        return !sprite || !!(sprite.flags & sprites.Flag.Destroyed);
+    }
 
     let setup: boolean = false;
     //% block

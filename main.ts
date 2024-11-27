@@ -2,8 +2,8 @@ namespace SpriteKind {
     export const EnemyProjectile = SpriteKind.create()
 }
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
-    if (custom.isRightFrom(enemyProjectile, playerSprite)) {
-        enemyProjectile = sprites.createProjectileFromSprite(img`
+    if (custom.isRightFrom(playerProjectile, playerSprite)) {
+        playerProjectile = sprites.createProjectileFromSprite(img`
             . . . . . . . . . . 
             . . . . . . . . . . 
             . . . . . . . . . . 
@@ -68,9 +68,10 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, oth
     info.changeScoreBy(1)
     music.play(music.melodyPlayable(music.zapped), music.PlaybackMode.InBackground)
 })
+let enemyProjectile: Sprite = null
 let enemySprite: Sprite = null
 let star: Sprite = null
-let enemyProjectile: Sprite = null
+let playerProjectile: Sprite = null
 let playerSprite: Sprite = null
 playerSprite = sprites.create(img`
     2 2 . . . . . . . . 
@@ -190,6 +191,21 @@ game.onUpdateInterval(500, function () {
                 enemySprite.setPosition(scene.screenWidth(), randint(0, scene.screenHeight()))
                 enemySprite.setVelocity(randint(-35, -25), 0)
                 enemySprite.setFlag(SpriteFlag.DestroyOnWall, true)
+                custom.runEvery(enemySprite, 3000, function (s) {
+                    enemyProjectile = sprites.createProjectileFromSprite(img`
+                        . . . . . . . . . . 
+                        . . . . . . . . . . 
+                        . . . . . . . . . . 
+                        . . . . . . b b . . 
+                        2 2 a 2 a 2 b 2 4 5 
+                        2 a 2 a 2 a 2 2 4 5 
+                        . . . . . . b b . . 
+                        . . . . . . . . . . 
+                        . . . . . . . . . . 
+                        . . . . . . . . . . 
+                        `, s, -50, 0)
+                    enemyProjectile.setKind(SpriteKind.EnemyProjectile)
+                })
             }
         }
     }
