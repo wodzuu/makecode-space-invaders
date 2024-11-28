@@ -61,6 +61,18 @@ namespace custom {
     }
 
     /**
+     * After a certain amount of time, the attached code will run.
+     * Blocks after this one will run without waiting.
+     */
+    //% block="after $time do"
+    //% time.defl=500
+    //% handlerStatement=1
+    //% %time=timePicker ms"
+    export function after(time: number, thenDo: () => void) {
+        setTimeout(thenDo, time)
+    }
+    
+    /**
      * Returns true if the given sprite does not exist,
      * or is destroyed, and false otherwise.
      */

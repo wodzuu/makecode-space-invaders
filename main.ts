@@ -1,9 +1,14 @@
 namespace SpriteKind {
     export const EnemyProjectile = SpriteKind.create()
+    export const Shield = SpriteKind.create()
 }
 sprites.onOverlap(SpriteKind.EnemyProjectile, SpriteKind.Player, function (sprite, otherSprite) {
+    if (shieldOn > 0) {
+        shieldOn += -1
+    } else {
+        info.changeLifeBy(-1)
+    }
     extraEffects.createSpreadEffectOnAnchor(sprite, extraEffects.createFullPresetsSpreadEffectData(ExtraEffectPresetColor.Fire, ExtraEffectPresetShape.Explosion), 100, 30, 5)
-    info.changeLifeBy(-1)
     sprites.destroy(sprite)
     music.play(music.melodyPlayable(music.bigCrash), music.PlaybackMode.InBackground)
 })
@@ -50,16 +55,103 @@ function createStar (x_position: number) {
 }
 info.onScore(60, function () {
     info.changeLifeBy(1)
+    setShieldOn()
 })
 info.onScore(30, function () {
     info.changeLifeBy(1)
+    setShieldOn()
 })
 info.onScore(10, function () {
     info.changeLifeBy(1)
+    setShieldOn()
 })
+function setShieldOn () {
+    shieldOn = 1
+    animation.runImageAnimation(
+    shieldSprite,
+    [img`
+        . . . . 9 9 9 9 9 9 9 . . . . . 
+        . . 9 9 . . . . . . . 9 9 . . . 
+        . 9 . . . . . . . . . . . 9 . . 
+        . 9 . . . . . . . . . . . 9 . . 
+        9 . . . . . . . . . . . . . 9 . 
+        9 . . . . . . . . . . . . . 9 . 
+        9 . . . . . . . . . . . . . 9 . 
+        9 . . . . . . . . . . . . . 9 . 
+        9 . . . . . . . . . . . . . 9 . 
+        9 . . . . . . . . . . . . . 9 . 
+        9 . . . . . . . . . . . . . 9 . 
+        . 9 . . . . . . . . . . . 9 . . 
+        . 9 . . . . . . . . . . . 9 . . 
+        . . 9 9 . . . . . . . 9 9 . . . 
+        . . . . 9 9 9 9 9 9 9 . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `,img`
+        . . . . . 9 9 9 9 9 9 9 . . . . 
+        . . . 9 9 . . . . . . . 9 9 . . 
+        . . 9 . . . . . . . . . . . 9 . 
+        . . 9 . . . . . . . . . . . 9 . 
+        . 9 . . . . . . . . . . . . . 9 
+        . 9 . . . . . . . . . . . . . 9 
+        . 9 . . . . . . . . . . . . . 9 
+        . 9 . . . . . . . . . . . . . 9 
+        . 9 . . . . . . . . . . . . . 9 
+        . 9 . . . . . . . . . . . . . 9 
+        . 9 . . . . . . . . . . . . . 9 
+        . . 9 . . . . . . . . . . . 9 . 
+        . . 9 . . . . . . . . . . . 9 . 
+        . . . 9 9 . . . . . . . 9 9 . . 
+        . . . . . 9 9 9 9 9 9 9 . . . . 
+        . . . . . . . . . . . . . . . . 
+        `,img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . 9 9 9 9 9 9 9 . . . . 
+        . . . 9 9 . . . . . . . 9 9 . . 
+        . . 9 . . . . . . . . . . . 9 . 
+        . . 9 . . . . . . . . . . . 9 . 
+        . 9 . . . . . . . . . . . . . 9 
+        . 9 . . . . . . . . . . . . . 9 
+        . 9 . . . . . . . . . . . . . 9 
+        . 9 . . . . . . . . . . . . . 9 
+        . 9 . . . . . . . . . . . . . 9 
+        . 9 . . . . . . . . . . . . . 9 
+        . 9 . . . . . . . . . . . . . 9 
+        . . 9 . . . . . . . . . . . 9 . 
+        . . 9 . . . . . . . . . . . 9 . 
+        . . . 9 9 . . . . . . . 9 9 . . 
+        . . . . . 9 9 9 9 9 9 9 . . . . 
+        `,img`
+        . . . . . . . . . . . . . . . . 
+        . . . . 9 9 9 9 9 9 9 . . . . . 
+        . . 9 9 . . . . . . . 9 9 . . . 
+        . 9 . . . . . . . . . . . 9 . . 
+        . 9 . . . . . . . . . . . 9 . . 
+        9 . . . . . . . . . . . . . 9 . 
+        9 . . . . . . . . . . . . . 9 . 
+        9 . . . . . . . . . . . . . 9 . 
+        9 . . . . . . . . . . . . . 9 . 
+        9 . . . . . . . . . . . . . 9 . 
+        9 . . . . . . . . . . . . . 9 . 
+        9 . . . . . . . . . . . . . 9 . 
+        . 9 . . . . . . . . . . . 9 . . 
+        . 9 . . . . . . . . . . . 9 . . 
+        . . 9 9 . . . . . . . 9 9 . . . 
+        . . . . 9 9 9 9 9 9 9 . . . . . 
+        `],
+    100,
+    true
+    )
+    custom.after(10000, function () {
+        shieldOn = 0
+    })
+}
 sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Player, function (sprite, otherSprite) {
+    if (shieldOn > 0) {
+        shieldOn += -1
+    } else {
+        info.changeLifeBy(-1)
+    }
     extraEffects.createSpreadEffectOnAnchor(sprite, extraEffects.createFullPresetsSpreadEffectData(ExtraEffectPresetColor.Fire, ExtraEffectPresetShape.Explosion), 100, 30, 5)
-    info.changeLifeBy(-1)
     sprites.destroy(sprite)
     music.play(music.melodyPlayable(music.bigCrash), music.PlaybackMode.InBackground)
 })
@@ -78,6 +170,8 @@ let enemyProjectile: Sprite = null
 let enemySprite: Sprite = null
 let star: Sprite = null
 let playerProjectile: Sprite = null
+let shieldOn = 0
+let shieldSprite: Sprite = null
 let playerSprite: Sprite = null
 playerSprite = sprites.create(img`
     2 2 . . . . . . . . 
@@ -91,6 +185,25 @@ playerSprite = sprites.create(img`
     . 2 2 . . . . . . . 
     2 2 . . . . . . . . 
     `, SpriteKind.Player)
+shieldSprite = sprites.create(img`
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . . . . . . . . . 
+    `, SpriteKind.Shield)
+shieldSprite.follow(playerSprite, 1000)
 controller.moveSprite(playerSprite, 0, 100)
 playerSprite.setPosition(15, scene.screenHeight() / 2)
 playerSprite.setStayInScreen(true)
@@ -142,6 +255,26 @@ game.onUpdate(function () {
             . 2 2 2 2 . . . . . 
             . 2 2 . . . . . . . 
             2 2 . . . . . . . . 
+            `)
+    }
+    if (shieldOn == 0) {
+        shieldSprite.setImage(img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
             `)
     }
 })
