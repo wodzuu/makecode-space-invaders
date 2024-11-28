@@ -25,7 +25,7 @@ namespace custom {
     //% reference.defl=reference
     //% reference.shadow=variables_get
     export function isRightFrom(sprite: Sprite, reference: Sprite): boolean {
-        if (sprite && reference) {
+        if (!isDestroyed(sprite) && !isDestroyed(reference)) {
             return sprite.left > reference.right;
         }
         return true;

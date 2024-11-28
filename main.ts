@@ -1,6 +1,12 @@
 namespace SpriteKind {
     export const EnemyProjectile = SpriteKind.create()
 }
+sprites.onOverlap(SpriteKind.EnemyProjectile, SpriteKind.Player, function (sprite, otherSprite) {
+    extraEffects.createSpreadEffectOnAnchor(sprite, extraEffects.createFullPresetsSpreadEffectData(ExtraEffectPresetColor.Fire, ExtraEffectPresetShape.Explosion), 100, 30, 5)
+    info.changeLifeBy(-1)
+    sprites.destroy(sprite)
+    music.play(music.melodyPlayable(music.bigCrash), music.PlaybackMode.InBackground)
+})
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     if (custom.isRightFrom(playerProjectile, playerSprite)) {
         playerProjectile = sprites.createProjectileFromSprite(img`
